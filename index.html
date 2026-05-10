@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Santiago Paulós – Visual Artist</title>
+  <meta name="description" content="Santiago Paulós. Visual artist. Contemporary painting. Portraits. b. 1983 in San José de Mayo, Uruguay." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjMWExYTE4Ii8+CiAgPHRleHQgeD0iMTYiIHk9IjIyIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjQwMCIgZmlsbD0iI2Y1ZjNlZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjAuNSI+U1A8L3RleHQ+Cjwvc3ZnPg==" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Libre+Franklin:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f3ef;
+      --text: #1a1a18;
+      --muted: #777;
+      --border: #d6d1c8;
+      --sans: 'Libre Franklin', sans-serif;
+      --serif: 'EB Garamond', Georgia, serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 18px; /* base — everything scales from here */
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.75;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 22px 40px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      background: var(--bg);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s;
+    }
+    header.scrolled { border-color: var(--border); }
+
+    .site-title {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      letter-spacing: .01em;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .site-subtitle {
+      font-size: .8rem;
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-left: 12px;
+    }
+
+    /* ── NAV ── */
+    nav { position: relative; }
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 200;
+      position: relative;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 1px;
+      background: var(--text);
+      transition: transform .25s, opacity .25s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav-menu {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      list-style: none;
+    }
+    .nav-menu > li { position: relative; }
+    .nav-menu > li > a,
+    .nav-menu > li > button {
+      display: block;
+      padding: 4px 12px;
+      font-size: .82rem;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      font-weight: 400;
+      white-space: nowrap;
+    }
+    .nav-menu > li > a:hover,
+    .nav-menu > li > button:hover { color: var(--muted); }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%; left: 0;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      min-width: 140px;
+      z-index: 200;
+      padding: 8px 0;
+    }
+    .nav-menu > li:hover .dropdown { display: block; }
+    .dropdown a {
+      display: block;
+      padding: 8px 18px;
+      font-size: .8rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .dropdown a:hover { color: var(--muted); }
+
+    /* ── MAIN ── */
+    main { padding-top: 72px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── HOME ── */
+    .home-inner {
+      padding: 60px 40px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .works-section { margin-bottom: 60px; }
+    .works-section h2 {
+      font-family: var(--serif);
+      font-size: .85rem;
+      font-weight: 400;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .work-thumb { cursor: pointer; display: block; text-decoration: none; }
+    .work-thumb img {
+      width: 100%;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+      display: block;
+      transition: opacity .3s;
+    }
+    .work-thumb:hover img { opacity: .82; }
+    .work-thumb p {
+      margin-top: 8px;
+      font-size: .82rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── GALLERY ── */
+    .gallery-inner {
+      padding: 50px 40px 80px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .gallery-inner h1 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .gallery-subtitle {
+      font-size: .88rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+      margin-bottom: 40px;
+    }
+    .gallery-image-wrap { margin-bottom: 32px; }
+    .gallery-image-wrap img { width: 100%; height: auto; display: block; }
+    .gallery-image-wrap em {
+      display: block;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+    .gallery-hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+    .back-link {
+      display: inline-block;
+      font-size: .82rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      margin-bottom: 32px;
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--text); }
+
+    /* ── ABOUT ── */
+    .about-inner {
+      padding: 50px 40px 80px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .about-inner h1 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      margin-bottom: 28px;
+    }
+    .about-intro {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+    .about-photo { width: 100%; max-width: 620px; margin-bottom: 10px; display: block; }
+    .about-photo-credit { font-size: .82rem; color: var(--muted); font-style: italic; margin-bottom: 36px; }
+    .about-inner h2 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin: 40px 0 14px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .about-inner ul { list-style: none; padding: 0; }
+    .about-inner ul li,
+    .about-inner ol li {
+      font-size: 1rem;
+      line-height: 1.75;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .about-inner ol { padding-left: 20px; }
+
+    /* ── CONTACT FORM ── */
+    .contact-intro { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 20px; }
+    .contact-form { margin-top: 20px; margin-bottom: 40px; }
+    .form-field { margin-bottom: 24px; }
+    .form-field label {
+      display: block;
+      font-size: .82rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      padding: 12px 0;
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--sans);
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+      resize: vertical;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus { border-color: var(--text); }
+    .form-field textarea { min-height: 100px; }
+    .form-submit {
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 14px 32px;
+      font-family: var(--sans);
+      font-size: .82rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .form-submit:hover { background: #444; }
+    .form-submit:disabled { background: var(--muted); cursor: default; }
+    .form-msg {
+      display: none;
+      font-size: 1rem;
+      margin-top: 16px;
+    }
+    .form-msg.success { color: #4a7c59; }
+    .form-msg.error   { color: #b94a48; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 28px 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .82rem;
+      color: var(--muted);
+      letter-spacing: .05em;
+    }
+    .dark-toggle {
+      background: none; border: none; cursor: pointer;
+      font-size: .82rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); font-family: var(--sans); padding: 0;
+    }
+    .dark-toggle:hover { color: var(--text); }
+
+    /* ── DARK MODE ── */
+    body.dark {
+      --bg: #111110;
+      --text: #e8e4dc;
+      --border: #2a2a28;
+      --muted: #666;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      html { font-size: 17px; }
+      header { padding: 18px 20px; }
+      .hamburger { display: flex; }
+      .hamburger span { width: 26px; }
+      .nav-menu {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--bg);
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 40px;
+        gap: 4px;
+        z-index: 50;
+      }
+      .nav-menu.open { display: flex; }
+      .nav-menu > li > a,
+      .nav-menu > li > button {
+        font-size: 1.15rem;
+        padding: 12px 0;
+        letter-spacing: .04em;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+      .dropdown { position: static; border: none; padding: 0 0 0 16px; display: none !important; }
+      .nav-menu > li.submenu-open .dropdown { display: block !important; }
+      .dropdown a { font-size: 1rem; padding: 10px 0; min-height: 44px; display: flex; align-items: center; }
+      .home-inner, .about-inner, .gallery-inner { padding: 30px 20px 60px; }
+      .works-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .gallery-inner h1, .about-inner h1 { font-size: 1.7rem; }
+      footer { padding: 20px; flex-direction: column; gap: 10px; text-align: center; }
+      .form-submit { width: 100%; padding: 16px; font-size: .9rem; }
+    }
+    @media (max-width: 480px) {
+      html { font-size: 16px; }
+      .works-grid { grid-template-columns: 1fr; }
+      .site-subtitle { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header id="site-header">
+  <div style="display:flex; align-items:baseline;">
+    <span class="site-title" onclick="navTo('home')">Santiago Paulós</span>
+    <span class="site-subtitle">Visual artist</span>
+  </div>
+  <nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="#" onclick="navTo('home'); return false;">Home</a></li>
+      <li><a href="#" onclick="navTo('about'); return false;">About / Contact</a></li>
+      <li>
+        <button onclick="toggleSubmenu(this)">Works IV ▾</button>
+        <ul class="dropdown">
+          <li><a href="#" onclick="navTo('gallery','2017'); return false;">Works 2017</a></li>
+          <li><a href="#" onclick="navTo('gallery','2016'); return false;">Works 2016</a></li>
+          <li><a href="#" onclick="navTo('gallery','2015'); return false;">Works 2015</a></li>
+        </ul>
+      </li>
+      <li>
+        <button onclick="toggleSubmenu(this)">Works III ▾</button>
+        <ul class="dropdown">
+          <li><a href="#" onclick="navTo('gallery','2014'); return false;">Works 2014</a></li>
+          <li><a href="#" onclick="navTo('gallery','2013'); return false;">Works 2013</a></li>
+          <li><a href="#" onclick="navTo('gallery','2012'); return false;">Works 2012</a></li>
+        </ul>
+      </li>
+      <li>
+        <button onclick="toggleSubmenu(this)">Works II ▾</button>
+        <ul class="dropdown">
+          <li><a href="#" onclick="navTo('gallery','2011'); return false;">Works 2011</a></li>
+          <li><a href="#" onclick="navTo('gallery','2010'); return false;">Works 2010</a></li>
+          <li><a href="#" onclick="navTo('gallery','2009'); return false;">Works 2009</a></li>
+          <li><a href="#" onclick="navTo('gallery','2008'); return false;">Works 2008</a></li>
+          <li><a href="#" onclick="navTo('gallery','2007'); return false;">Works 2007</a></li>
+        </ul>
+      </li>
+      <li>
+        <button onclick="toggleSubmenu(this)">Works I ▾</button>
+        <ul class="dropdown">
+          <li><a href="#" onclick="navTo('gallery','2006'); return false;">Works 2006</a></li>
+          <li><a href="#" onclick="navTo('gallery','2005'); return false;">Works 2005</a></li>
+          <li><a href="#" onclick="navTo('gallery','2004'); return false;">Works 2004</a></li>
+          <li><a href="#" onclick="navTo('gallery','2003'); return false;">Works 2003</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div id="page-home" class="page active">
+    <div class="home-inner" id="home-content"></div>
+  </div>
+
+  <div id="page-gallery" class="page">
+    <div class="gallery-inner" id="gallery-content"></div>
+  </div>
+
+  <div id="page-about" class="page">
+    <div class="about-inner">
+      <h1>About / Contact</h1>
+      <p class="about-intro">
+        b. 1983 in San José de Mayo, Uruguay.<br>
+        Lives and works between Montevideo and Edinburgh, UK.
+      </p>
+      <img class="about-photo"
+        src="https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Santiago-Paulos_by_Pascal-Milhavet.jpg?resize=750%2C476&ssl=1"
+        alt="Santiago Paulós — photo by Pascal Milhavet" loading="lazy" />
+      <p class="about-photo-credit">Photo: Pascal Milhavet</p>
+
+      <p class="contact-intro">To get in touch, please use the form below.</p>
+
+      <!-- Formspree: form ID is kept server-side only; email never appears in source -->
+      <div class="contact-form">
+        <div class="form-field">
+          <label for="cf-name">Name *</label>
+          <input type="text" id="cf-name" autocomplete="name" />
+        </div>
+        <div class="form-field">
+          <label for="cf-email">Email *</label>
+          <input type="email" id="cf-email" autocomplete="email" />
+        </div>
+        <div class="form-field">
+          <label for="cf-msg">Message *</label>
+          <textarea id="cf-msg" rows="5"></textarea>
+        </div>
+        <button class="form-submit" id="cf-submit" onclick="submitForm()">Send message</button>
+        <p class="form-msg success" id="cf-success">Thank you — your message has been sent!</p>
+        <p class="form-msg error"   id="cf-error">Something went wrong. Please try again or email directly.</p>
+      </div>
+
+      <h2>Education</h2>
+      <ul>
+        <li>The University of Edinburgh – ECA, UK – Master of Fine Art (MFA) Distinction</li>
+        <li>Universidad ORT Uruguay – Graphic Design</li>
+      </ul>
+
+      <h2>Teaching</h2>
+      <ul>
+        <li>Visiting Tutor Design, Art and Technology – University ORT Uruguay, 2017–2018</li>
+        <li>Visiting Tutor, Göteborgs konstskola, Sweden, 2017–2018</li>
+        <li>Visiting Tutor, Antonio Gala Foundation, Spain, 2018</li>
+        <li>Visiting Tutor, Edinburgh College of Art – DRF Award IAD, 2017</li>
+        <li>Guest Lecturer 'Painting in the Information Age' University ORT Uruguay, 2016</li>
+        <li>Guest Artist, Workshop – Pablo Atchugarry Foundation, Uruguay, 2013</li>
+        <li>Visiting Artist, The Altos de Chavón School of Design, Dominican Republic, 2009</li>
+      </ul>
+
+      <h2>Exhibitions</h2>
+      <ul>
+        <li>Kayak, Suede Gallery, Edinburgh, UK, 2017 (solo)</li>
+        <li>Drift Terrain, Edinburgh College of Art, UK, 2016</li>
+        <li>Interim, Talbot Rice Gallery, Edinburgh, UK, 2015</li>
+        <li>A World of Ego Close to the Gods, Embassy Gallery, Edinburgh, UK, 2015</li>
+        <li>BAF, Room Art Fair, Madrid, ES, 2014</li>
+        <li>Kunzt Gallery, Jose Ignacio, UY, 2013</li>
+        <li>+x10, University of Salamanca, ES, 2012</li>
+        <li>Gazes, 6280 Gallery, Montevideo, UY, 2012 (solo)</li>
+        <li>FAG, Eugenio de Almeida Foundation, Évora, PT, 2011</li>
+        <li>Plástica Profunda, Fundación Unión, Montevideo, UY, 2010</li>
+        <li>Cultural Space, Queens Museum of Art, New York, US, 2009</li>
+        <li>AIR, Altos de Chavon Gallery, DO, 2009 (solo)</li>
+        <li>VI Promo, Antonio Gala Foundation, Cordoba, ES, 2008</li>
+        <li>Paul Cézanne Prize, Subte, Montevideo, UY, 2007</li>
+        <li>Portraits, Museum of San Jose, UY, 2006 (solo)</li>
+        <li>Pinturas, Carlos Federico Saez Gallery, Montevideo, UY, 2005</li>
+        <li>Batuz Foundation Prize, Carlos Federico Saez Gallery, Montevideo, UY, 2004</li>
+      </ul>
+
+      <h2>Awards</h2>
+      <ol>
+        <li>Andrew Grant Bequest, Edinburgh College of Art, UK, 2015</li>
+        <li>Royal Scottish Academy John Kinross Scholarship to Florence, Italy, 2015</li>
+        <li>Residency at The Altos de Chavón School of Design, Dominican Republic, 2009</li>
+        <li>Catedra Francisco de Goya, Complutense University Madrid – taught by Antonio Lopez Garcia, Spain, 2009</li>
+        <li>Antonio Gala Foundation Scholarship, Cordoba, Spain, 2007</li>
+        <li>Shortlisted: Paul Cézanne Prize, Ambassade de France in Uruguay, 2006</li>
+        <li>Batuz Foundation Prize, Altzella, Germany, 2004</li>
+      </ol>
+
+      <h2>Art Fairs</h2>
+      <ul>
+        <li>ESTE ARTE, Punta del Este, Uruguay, 2018</li>
+        <li>PINTA Miami – Crossing Cultures, Miami, US, 2017</li>
+        <li>Art en Capital – Grand Palais, Paris, France, 2012</li>
+      </ul>
+
+      <h2>Collections</h2>
+      <ul>
+        <li>Royal Scottish Academy, UK</li>
+        <li>Caja Ávila Foundation, Spain</li>
+        <li>Antonio Gala Foundation, Spain</li>
+        <li>Luciano Benetton Collection – Imago Mundi, Italy</li>
+        <li>Transport and Public Works Ministry of Uruguay</li>
+        <li>Museum of San José de Mayo, Uruguay</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>© Santiago Paulós</span>
+  <button class="dark-toggle" id="dark-btn" onclick="toggleDark()">Dark mode: off</button>
+</footer>
+
+<script>
+// ─── WORKS DATA ───────────────────────────────────────────────────────────────
+const W = {
+  '2017': { title:'Works 2017', subtitle:'Kayak exhibition – Suede Gallery, Edinburgh',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_04.jpg?resize=750%2C501&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_04.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/reflection_santiagopaulos-1.jpg?resize=750%2C996&ssl=1',cap:'Reflection – oil, acrylic, and silkscreen ink on paper – 53×40 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_001.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_070-1.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_08.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_010.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_06.jpg?resize=750%2C501&ssl=1',cap:'Photos: Daniel Cook'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/kayak_santiagopaulos-1.jpg?resize=750%2C597&ssl=1',cap:'Kayak – oil, acrylic, and silkscreen ink on canvas – 61×75.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_02.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/exploring-the-shore_santiagopaulos-1.jpg?resize=718%2C1024&ssl=1',cap:'Exploring the shore – oil and acrylic on canvas – 100×70 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/pink-sunset_santiagopaulos-1.jpg?resize=750%2C563&ssl=1',cap:'Pink sunset – oil, acrylic, and silkscreen ink on canvas – 45×60 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_090-1.jpg?resize=750%2C510&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_10.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_050-1.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Kayak_Santiago-Paulos_030-1.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/green-tunnel_santiagopaulos-1.jpg?resize=750%2C836&ssl=1',cap:'Green tunnel – oil and acrylic on canvas – 65×58 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/sand-castle_santiagopaulos-1.jpg?resize=750%2C567&ssl=1',cap:'Sand castle – oil, acrylic, and silkscreen ink on paper – 27.5×36.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/land2_santiagopaulos-1.jpg?resize=750%2C567&ssl=1',cap:'Land 2 – oil, acrylic, and silkscreen ink on paper – 27.5×36.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/land1_santiagopaulos.jpg?resize=750%2C567&ssl=1',cap:'Land 1 – oil, acrylic, and silkscreen ink on paper – 27.5×36.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/flow_santiagopaulos.jpg?resize=750%2C567&ssl=1',cap:'Flow – oil, acrylic, and silkscreen ink on paper – 27.5×36.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/grain_santiagopaulos.jpg?resize=750%2C530&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/portal_santiagopaulos-1.jpg?resize=600%2C817&ssl=1',cap:'2 triangles – acrylic on lenticular sheet – 38×28 cm'},
+    ]},
+  '2016': { title:'Works 2016', subtitle:'Drift Terrain – Edinburgh College of Art',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/001santiagopaulos.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/thecliff-full3.jpg?resize=750%2C511&ssl=1',cap:'The cliff – oil, acrylic, and silkscreen ink on canvas – 110×200 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/boat-1.jpg?resize=600%2C468&ssl=1',cap:'Boat – oil, acrylic, and silkscreen ink on canvas – 35×45 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiagopaulos-the-isle.jpg?resize=700%2C908&ssl=1',cap:'The isle – oil, acrylic, and silkscreen ink on canvas – 45×35 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/5_Santiago-Paulos_Side-view_2016.jpg?resize=586%2C800&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos-splash.jpg?resize=500%2C374&ssl=1',cap:'Splash – oil, acrylic, and silkscreen ink on canvas – 30×40 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/installation-view_santiagopaulos_drift-terrain-1.jpg?resize=750%2C500&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/press1_santiagopaulos_drift-terrain.jpg?resize=750%2C442&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos-wall-1.jpg?resize=556%2C500&ssl=1',cap:'Wall – acrylic and silkscreen ink on canvas – 90×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos-stairway.jpg?resize=688%2C500&ssl=1',cap:'Stairway – acrylic and silkscreen ink on canvas – 80×110 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos_printed-sunset-1.jpg?resize=424%2C600&ssl=1',cap:'Printed sunset – silkscreen ink on paper – 30×41 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/015_seascape-santiagopaulos_sculpture_court.jpg?resize=750%2C495&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Santiago-Paulos-The_isle.jpg?resize=750%2C968&ssl=1',cap:'The isle – oil, acrylic, and silkscreen ink on canvas – 45×35 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos_the-cave.jpg?resize=375%2C482&ssl=1',cap:'The cave – acrylic and silkscreen ink on canvas – 45×35 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/1binstallation-view-santiagopaulos.jpg?resize=750%2C500&ssl=1',cap:'Installation view'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiagopaulos_dift-terrain_low01.jpg?resize=750%2C477&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Santiago_Paulos_Peel-off3.jpg?resize=750%2C408&ssl=1',cap:'Peel-off 3 – acrylic and silkscreen ink on aluminium – 15×35×0.1 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/panorama-full-santiagopaulos.jpg?resize=750%2C563&ssl=1',cap:'Panorama – oil, acrylic, and silkscreen ink on canvas – 110×200 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos_pink-sea.jpg?resize=666%2C500&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/Santiago_Paulos_MFA_Pink_Sea-2.jpg?resize=480%2C392&ssl=1',cap:'Pink sea – oil, acrylic, and silkscreen ink on canvas – 40×53 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos_the-land.jpg?resize=597%2C449&ssl=1',cap:'The land – oil, acrylic, and silkscreen ink on canvas – 40×53 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos_white-horses.jpg?resize=431%2C573&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/diagonal-full-1.jpg?resize=500%2C389&ssl=1',cap:'Diagonal – acrylic and silkscreen ink on canvas – 35×45 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/santiago_paulos-island-e1469540961549.jpg?resize=400%2C291&ssl=1',cap:'Island – oil, acrylic, and silkscreen ink on canvas – 45×60 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/wake2.jpg?resize=700%2C899&ssl=1',cap:'Wake – oil, acrylic, and silkscreen ink on canvas – 45×35 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/water2-1.jpg?resize=700%2C700&ssl=1',cap:'Water – acrylic and silkscreen ink on canvas – 35×35 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/001santiagopaulos.jpg?resize=750%2C501&ssl=1',cap:''},
+    ]},
+  '2015': { title:'Works 2015', subtitle:'Environment – Edinburgh College of Art',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiagopaulos-environment2.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/environment2.jpg?resize=750%2C500&ssl=1',cap:'Installation view'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/poles-and-tree.jpg?resize=532%2C1000&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/environment3.jpg?resize=336%2C509&ssl=1',cap:'Poles and tree – oil-acrylic on canvas – 200×110 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/environment1.jpg?resize=750%2C500&ssl=1',cap:'Installation view'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/fence-over-sky.jpg?resize=541%2C1000&ssl=1',cap:'Fence over sky – acrylic on canvas – 200×110 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/poles-slides-and-tree.jpg?resize=667%2C1000&ssl=1',cap:'Poles, slides and tree – acrylic on canvas – 200×110 cm'},
+    ]},
+  '2014': { title:'Works 2014', subtitle:'Notional Spaces paintings',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos2-edi.jpg?resize=500%2C333&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/looking-for-snow1.jpg?resize=750%2C456&ssl=1',cap:'Looking for snow – oil-acrylic on canvas – 60×100 cm / 100×80 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/dazzled.jpg?resize=750%2C627&ssl=1',cap:'Dazzled – oil-acrylic on canvas – 150×180 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/frederique.jpg?resize=402%2C600&ssl=1',cap:'Frederique – oil-acrylic on linen – 60×40 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/TALI8078.jpg?resize=750%2C487&ssl=1',cap:'Photo: Tali Kimelman'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/magic-shrubs.jpg?resize=750%2C426&ssl=1',cap:'Magic shrubs – oil-acrylic on canvas – 110×200 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/terrierfamily1.jpg?resize=600%2C326&ssl=1',cap:'Terrier family – oil-acrylic on canvas – 110×200 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/3-wishes.jpg?resize=750%2C577&ssl=1',cap:'3 wishes – oil-acrylic on canvas – 155×120 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/curtain2.jpg?resize=750%2C500&ssl=1',cap:'Curtain – oil-acrylic on canvas – 100×150 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/turquia.jpg?resize=600%2C600&ssl=1',cap:'Turkey – oil-acrylic on canvas – 60×60 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/woman-from-istanbul.jpg?resize=750%2C425&ssl=1',cap:'Woman from Istanbul – oil-acrylic on canvas – 110×200 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/fluorescense.jpg?resize=700%2C561&ssl=1',cap:'Fluorescence – oil-acrylic on canvas – 80×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/puppet-show.jpg?resize=750%2C750&ssl=1',cap:'Puppet show – oil-acrylic on canvas – 150×150 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/going-to-school.jpg?resize=750%2C499&ssl=1',cap:'Going to school – oil-acrylic on canvas – 110×165 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/playground.jpg?resize=597%2C900&ssl=1',cap:'Playground – oil-acrylic on canvas – 150×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/TALI8036.jpg?resize=683%2C1024&ssl=1',cap:'Studio'},
+    ]},
+  '2013': { title:'Works 2013', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-10.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/vik-hotel2.jpg?resize=750%2C500&ssl=1',cap:'Rojo – oil-acrylic on canvas – 45×45 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/terciopelo-magenta.jpg?resize=750%2C750&ssl=1',cap:'Terciopelo magenta – oil-acrylic on canvas – 114×114 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/poliptico.jpg?resize=750%2C103&ssl=1',cap:'Polyptych – oil-acrylic on canvas – 45×45 cm (each)'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/sintesis-verde.jpg?resize=750%2C750&ssl=1',cap:'Green synthesis – oil-acrylic on canvas – 100×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/triptico.jpg?resize=750%2C363&ssl=1',cap:'Triptych – oil-acrylic on canvas – 150×100 cm (each)'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/vik-hotel3.jpg?resize=750%2C500&ssl=1',cap:'Cielo – oil-acrylic on canvas – 45×45 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/cuarto-amarillo.jpg?resize=750%2C750&ssl=1',cap:'Cuarto amarillo – oil-acrylic on canvas – 150×150 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/paulos-studio.jpg?resize=750%2C500&ssl=1',cap:'Photo: Tali Kimelman'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/1b.jpg?resize=750%2C500&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/armonia-naranja.jpg?resize=750%2C750&ssl=1',cap:'Orange harmony – oil-acrylic on canvas – 100×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/vik-hotel.jpg?resize=750%2C500&ssl=1',cap:'Spain – oil-acrylic on canvas – 45×45 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/adivina.jpg?resize=750%2C750&ssl=1',cap:'Adivina – oil-acrylic on canvas – 100×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/eterea-2.jpg?resize=750%2C601&ssl=1',cap:'Ethereal – oil-acrylic on canvas – 80×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/laguna-1.jpg?resize=750%2C447&ssl=1',cap:'Laguna – charcoal-acrylic on canvas – 60×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/lizette-1.jpg?resize=750%2C750&ssl=1',cap:'Lizette – charcoal on canvas – 100×100 cm'},
+    ]},
+  '2012': { title:'Works 2012', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-11.jpg?resize=500%2C333&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/imagenesdelanieve.jpg?resize=750%2C618&ssl=1',cap:'Images of the snow – oil-acrylic on canvas – 150×180 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/fotobn1-1.jpg?resize=750%2C500&ssl=1',cap:'Photo: Tali Kimelman'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/flor-cosmica-1.jpg?resize=750%2C582&ssl=1',cap:'Flor Cósmica – oil on canvas – 120×155 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/explosion-6.jpg?resize=750%2C501&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/explosion-detalle-4.jpg?resize=750%2C750&ssl=1',cap:'Explosion – oil-acrylic on canvas – 110×165 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/autito-azul.jpg?resize=750%2C428&ssl=1',cap:'Autito azul – oil-acrylic on canvas – 110×200 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/lo-cristalino.jpg?resize=750%2C750&ssl=1',cap:'Lo cristalino – oil-acrylic on canvas – 103×103 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/strangemoments2.jpg?resize=750%2C500&ssl=1',cap:'Strange moments – oil-acrylic on canvas – 114×114 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/japon.jpg?resize=750%2C448&ssl=1',cap:'Japan – oil-acrylic on canvas – 60×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/elmirador.jpg?resize=600%2C383&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/mexico.jpg?resize=750%2C450&ssl=1',cap:'Mexico – oil-acrylic on canvas – 60×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/art-studio.jpg?resize=750%2C500&ssl=1',cap:'Photo: Tali Kimelman'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/linea-verde1.jpg?resize=750%2C514&ssl=1',cap:'Green line – oil on canvas – 90×130 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/teatro-oculto1.jpg?resize=750%2C582&ssl=1',cap:'Hidden theatre – oil on canvas – 120×155 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/sin-titulo.jpg?resize=524%2C794&ssl=1',cap:'Untitled – oil on canvas – 120×80 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/huracan-2.jpg?resize=750%2C494&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/huracan-detalle-4.jpg?resize=750%2C750&ssl=1',cap:'Hurricane – oil on canvas – 80×120 cm'},
+    ]},
+  '2011': { title:'Works 2011', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-8.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292585016.jpeg?resize=750%2C750&ssl=1',cap:'Tennis player – oil-acrylic on canvas – 146×146 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/rocio-4.jpg?resize=750%2C749&ssl=1',cap:'Rocío – oil on canvas – 140×140 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292608051.jpeg?resize=750%2C752&ssl=1',cap:'Estanque 1 – oil-acrylic on canvas – 150×150 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292640805.jpeg?resize=750%2C576&ssl=1',cap:'The forest – oil-acrylic on canvas – 120×155 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292636344.jpeg?resize=500%2C322&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/thelake.jpg?resize=750%2C500&ssl=1',cap:'The lake – oil-acrylic on canvas – 120×155 cm. Photo: Martin Irazoqui'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/2-1.jpg?resize=700%2C700&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/4-1.jpg?resize=700%2C700&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/1-1.jpg?resize=700%2C700&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292638862.jpeg?resize=750%2C578&ssl=1',cap:'Red tunnel – oil-acrylic on canvas – 120×155 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292637902.jpeg?resize=700%2C580&ssl=1',cap:'Enchanted garden – oil on canvas – 150×180 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292606168.jpeg?resize=750%2C584&ssl=1',cap:'Blue satin – oil on canvas – 120×155 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292602896.jpeg?resize=600%2C603&ssl=1',cap:'Man with eye glasses – oil on canvas – 89×89 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292598887.jpeg?resize=750%2C750&ssl=1',cap:'White hat – oil-acrylic on canvas – 140×140 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/ninamagica-4.jpg?resize=750%2C750&ssl=1',cap:'Magic little girl – oil on canvas – 150×150 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292591468.jpeg?resize=750%2C750&ssl=1',cap:'Milagros – oil on canvas – 150×150 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638292594300.jpeg?resize=750%2C750&ssl=1',cap:'Paula – oil-acrylic on canvas – 150×150 cm'},
+    ]},
+  '2010': { title:'Works 2010', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-7.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/IMG_7709.jpg?resize=750%2C855&ssl=1',cap:'Azul – oil on canvas – 60×50 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297148505.jpeg?resize=480%2C406&ssl=1',cap:'Sombrero negro – oil on canvas – 86×102 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297115851-2.jpeg?resize=700%2C464&ssl=1',cap:'Magenta – oil-acrylic on canvas – 102×140 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297158855.jpeg?resize=750%2C623&ssl=1',cap:'Little girl – oil on canvas – 54×64 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297114515-2.jpeg?resize=750%2C488&ssl=1',cap:'Olympia – oil-acrylic on canvas – 106×164 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297119015-3.jpeg?resize=750%2C548&ssl=1',cap:''},
+    ]},
+  '2009': { title:'Works 2009', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-6.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/DSC_0685.jpg?resize=750%2C502&ssl=1',cap:'The kid – oil on canvas – 30×40 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297730768.jpeg?resize=600%2C748&ssl=1',cap:'Mirna – oil on canvas – 50×40 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297717042.jpeg?resize=450%2C358&ssl=1',cap:'Empapelado azul – oil on canvas – 40×50 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/DSC_0717.jpg?resize=750%2C502&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/DSC_0718.jpg?resize=750%2C502&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297739881.jpeg?resize=500%2C291&ssl=1',cap:'Perfil con verde y azul – oil on canvas – 70×117 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297714825.jpeg?resize=479%2C384&ssl=1',cap:'Lolita – oil on canvas – 100×80 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297710182.jpeg?resize=730%2C900&ssl=1',cap:'Interior rosa – oil on canvas – 80×100 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297691556.jpeg?resize=400%2C400&ssl=1',cap:'Cenital – oil on canvas – 47×47 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638297703819.jpeg?resize=655%2C800&ssl=1',cap:'El nadador – oil on canvas – 65×54 cm'},
+    ]},
+  '2008': { title:'Works 2008', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-5.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/MG_6343.jpg?resize=750%2C492&ssl=1',cap:'Verónica 2 – oil on canvas – 80×100 cm. Photos: David Villalba'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638298374144.jpeg?resize=450%2C370&ssl=1',cap:'Javier Vicedo Alós – oil on canvas – 38×46 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638298375576-1.jpeg?resize=300%2C263&ssl=1',cap:'Bodegón 2 – oil on canvas – 50×61 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638298379882-1.jpeg?resize=350%2C350&ssl=1',cap:'Bodegón 1 – oil on canvas – 50×50 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638298372508.jpeg?resize=450%2C371&ssl=1',cap:'Antonio Gala – oil on canvas – 38×46 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638298370459.jpeg?resize=450%2C371&ssl=1',cap:'Juan Gómez Bárcena – oil on canvas – 38×46 cm'},
+    ]},
+  '2007': { title:'Works 2007', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-4.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638298983659.jpeg?resize=615%2C490&ssl=1',cap:'Veronica – oil on canvas – 40×50 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/alejandra.jpg?resize=750%2C623&ssl=1',cap:'Alejandra – oil on canvas – 54×65 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638298985119.jpeg?resize=559%2C456&ssl=1',cap:'Juan Pedro Paz – oil on canvas – 30×40 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/florencia.jpg?resize=750%2C596&ssl=1',cap:'Florencia – oil on canvas – 40×50 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/mariana.jpg?resize=750%2C620&ssl=1',cap:'Mariana – oil on canvas – 54×65 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/payaso2.jpg?resize=750%2C620&ssl=1',cap:'Payaso 2 – oil on canvas – 54×65 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/MG_0833.jpg?resize=750%2C500&ssl=1',cap:'Photo: David Villalba'},
+    ]},
+  '2006': { title:'Works 2006', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-3.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/TALI2891.jpg?resize=750%2C879&ssl=1',cap:'El bastardo – oil on canvas – 40×50 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/CIMG3951.jpg?resize=750%2C515&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638299898800.jpeg?resize=750%2C783&ssl=1',cap:'Emile Zola – oil-acrylic on cardboard – 120×120 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638299902791.jpeg?resize=300%2C412&ssl=1',cap:'Painting 2 – oil on paper – 63×55 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638299895829.jpeg?resize=750%2C775&ssl=1',cap:'Paul Cézanne – oil-acrylic on cardboard – 120×120 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638299892137.jpeg?resize=250%2C279&ssl=1',cap:'Painting 1 – oil on paper – 64×52 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638299889619.jpeg?resize=250%2C303&ssl=1',cap:'Portrait with scarf – oil on paper – 64×52 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/IMG_771233.jpg?resize=476%2C1024&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/IMG_7712z.jpg?resize=750%2C643&ssl=1',cap:'Painting 3 – oil on paper – 85×63 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638299887654.jpeg?resize=605%2C354&ssl=1',cap:'Polyptych 1 – oil on canvas – 40×50 cm (each)'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638299879346.jpeg?resize=600%2C354&ssl=1',cap:'Polyptych 2 – oil on canvas – 40×50 cm (each)'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638300025353.jpeg?resize=750%2C943&ssl=1',cap:'Magenta head – acrylic on paper – 100×80 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/HelloIMG1638299997106.jpeg?resize=750%2C794&ssl=1',cap:'Yellow self-portrait – acrylic on paper – 104×95 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/11/1638300248200.jpeg?resize=750%2C674&ssl=1',cap:'Fan – acrylic on paper – 96×110 cm'},
+    ]},
+  '2005': { title:'Works 2005', subtitle:'Pinturas 2005. Tondos y retratos.',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-2.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365785534.jpeg?resize=750%2C757&ssl=1',cap:'Espacio rojo – oil on cardboard – 65.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/2005.jpg?resize=750%2C500&ssl=1',cap:'Studio view'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365790316.jpeg?resize=750%2C261&ssl=1',cap:'Triptych – oil on cardboard – 65.5 cm diameter each'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365774677.jpeg?resize=500%2C348&ssl=1',cap:'Ana – oil-acrylic on paper – 42×60 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365782884.jpeg?resize=750%2C757&ssl=1',cap:'Consultorio – oil on cardboard – 65.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365783979.jpeg?resize=750%2C757&ssl=1',cap:'El Bastardo – oil on cardboard – 65.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/El_Greco_-_A_Boy_Blowing_on_an_Ember_to_Light_a_Candle_Soplon_-_WGA10422.jpg?resize=750%2C887&ssl=1',cap:''},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365775974.jpeg?resize=750%2C757&ssl=1',cap:"Sobre El Greco – oil on cardboard – 65.5 cm. Based on 'A Boy Blowing on an Ember to Light a Candle' – El Greco, 1570–72"},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365778084.jpeg?resize=361%2C361&ssl=1',cap:'Martín Solana – oil on cardboard – 65.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365777750.jpeg?resize=361%2C361&ssl=1',cap:'E.M.L – oil on cardboard – 65.5 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638365775320.jpeg?resize=500%2C348&ssl=1',cap:'Sala de espera – oil-acrylic on paper – 42×60 cm'},
+    ]},
+  '2004': { title:'Works 2004', subtitle:'Close-up portraits',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos-1.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/nini.jpg?resize=683%2C1024&ssl=1',cap:'Nini – oil on cardboard – 169×107 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/lucian-freud.jpg?resize=750%2C544&ssl=1',cap:'Lucian Freud – mixed media on paper – 48×67 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/918.jpg?resize=750%2C689&ssl=1',cap:'Analgia – oil on cardboard – 97 cm (diam)'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/2919.jpg?resize=750%2C685&ssl=1',cap:'Climaterio – oil on cardboard – 97 cm (diam)'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/el-casero-de-la-casa-del-aguila.jpg?resize=750%2C557&ssl=1',cap:'Eagle house – oil on paper – 88×120 cm'},
+    ]},
+  '2003': { title:'Works 2003', subtitle:'',
+    thumb:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/santiago_paulos11.jpg?resize=500%2C334&ssl=1',
+    images:[
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/889.jpg?resize=566%2C1024&ssl=1',cap:'Abuela III – mixed media on paper'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638367218825.jpeg?resize=750%2C717&ssl=1',cap:'Abuela II – oil on paper – 65×70 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638367212411.jpeg?resize=340%2C334&ssl=1',cap:'Abuela II (sketch) – oil on paper – 65×70 cm'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/2953.jpg?resize=750%2C500&ssl=1',cap:'Photo: Tali Kimelman'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638367213090.jpeg?resize=397%2C320&ssl=1',cap:'Abuela I – oil on wood'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/1638367991977.jpeg?resize=200%2C419&ssl=1',cap:'Abuela III – graphite on paper'},
+      {src:'https://i0.wp.com/santiagopaulos.com/wp-content/uploads/2021/12/HelloIMG1638367213457.jpeg?resize=407%2C406&ssl=1',cap:'Abuela tondo – mixed media on cardboard'},
+    ]},
+};
+
+const SECTIONS = [
+  {label:'Works IV',  years:['2017','2016','2015']},
+  {label:'Works III', years:['2014','2013','2012']},
+  {label:'Works II',  years:['2011','2010','2009','2008','2007']},
+  {label:'Works I',   years:['2006','2005','2004','2003']},
+];
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderHome() {
+  let h = '';
+  SECTIONS.forEach(sec => {
+    h += `<div class="works-section"><h2>${sec.label}</h2><div class="works-grid">`;
+    sec.years.forEach(yr => {
+      const w = W[yr];
+      h += `<a class="work-thumb" href="#" onclick="navTo('gallery','${yr}'); return false;">
+        <img src="${w.thumb}" alt="${w.title}" loading="lazy" />
+        <p>${w.title}</p>
+      </a>`;
+    });
+    h += '</div></div>';
+  });
+  document.getElementById('home-content').innerHTML = h;
+}
+
+function renderGallery(year) {
+  const w = W[year];
+  let h = `<a class="back-link" href="#" onclick="navTo('home'); return false;">← All works</a>
+    <h1>${w.title}</h1>`;
+  if (w.subtitle) h += `<p class="gallery-subtitle">${w.subtitle}</p>`;
+  w.images.forEach((img, i) => {
+    h += `<div class="gallery-image-wrap">
+      <img src="${img.src}" alt="${img.cap || w.title}" loading="lazy" />
+      ${img.cap ? `<em>${img.cap}</em>` : ''}
+    </div>`;
+    if (i < w.images.length - 1) h += '<hr class="gallery-hr" />';
+  });
+  document.getElementById('gallery-content').innerHTML = h;
+}
+
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  closeMenu();
+}
+function navTo(page, year) {
+  if (page === 'home') renderHome();
+  if (page === 'gallery' && year) renderGallery(year);
+  showPage(page);
+  return false;
+}
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('nav-menu').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('nav-menu').classList.remove('open');
+}
+function toggleSubmenu(btn) { btn.closest('li').classList.toggle('submenu-open'); }
+
+// ─── DARK MODE ────────────────────────────────────────────────────────────────
+function toggleDark() {
+  const on = document.body.classList.toggle('dark');
+  document.getElementById('dark-btn').textContent = 'Dark mode: ' + (on ? 'on' : 'off');
+  try { localStorage.setItem('sp-dark', on ? '1' : ''); } catch(e) {}
+}
+
+// ─── CONTACT FORM → FORMSPREE ─────────────────────────────────────────────────
+// The Formspree endpoint is fetched from /formspree-endpoint.json (not hardcoded here)
+// so your email address never appears in the page source.
+async function submitForm() {
+  const name  = document.getElementById('cf-name').value.trim();
+  const email = document.getElementById('cf-email').value.trim();
+  const msg   = document.getElementById('cf-msg').value.trim();
+  if (!name || !email || !msg) { alert('Please fill in all fields.'); return; }
+
+  const btn = document.getElementById('cf-submit');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    // Load endpoint config (kept out of source so email is not exposed)
+    const cfg = await fetch('/formspree-config.json').then(r => r.json());
+    const res = await fetch(cfg.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, email, message: msg })
+    });
+    if (res.ok) {
+      document.getElementById('cf-success').style.display = 'block';
+      document.getElementById('cf-name').value = '';
+      document.getElementById('cf-email').value = '';
+      document.getElementById('cf-msg').value = '';
+    } else {
+      throw new Error('non-ok');
+    }
+  } catch {
+    document.getElementById('cf-error').style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send message';
+  }
+}
+
+// ─── SCROLL HEADER ────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('site-header').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+try { if (localStorage.getItem('sp-dark') === '1') { document.body.classList.add('dark'); document.getElementById('dark-btn').textContent = 'Dark mode: on'; } } catch(e) {}
+renderHome();
+</script>
+</body>
+</html>
