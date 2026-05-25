@@ -1,5 +1,3 @@
 {
-  "outputDirectory": "public",
-  "buildCommand": "node scripts/build.js",
-  "installCommand": "echo no-install"
+  "outputDirectory": "public"
 }
